@@ -63,13 +63,11 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-                    <!-- Cloud Sync Status & Settings Button -->
                     <button onclick="openSyncModal()" id="btn-cloud-sync" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/70 text-slate-600 text-xs font-medium flex items-center gap-1.5 border border-slate-200/70 transition-all">
                         <i id="cloud-icon" data-lucide="cloud-off" class="w-3.5 h-3.5 text-slate-400"></i>
                         <span id="cloud-status-text">ยังไม่เชื่อมคลาวด์</span>
                     </button>
 
-                    <!-- Date Mode Switcher -->
                     <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/70">
                         <button id="btn-mode-sys" onclick="setDateMode('system')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 bg-white text-brand-600 shadow-sm">
                             <i data-lucide="clock" class="w-3.5 h-3.5"></i>
@@ -340,10 +338,10 @@
 
             <div class="flex items-center gap-2 pt-2">
                 <button onclick="saveCloudUrl()" class="flex-1 py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium shadow-sm transition-colors">
-                    บันทึกและซิงก์ข้อมูล
+                    บันทึกและดึงข้อมูล
                 </button>
-                <button onclick="syncFromCloud(true)" id="btn-manual-sync" class="py-2.5 px-3 rounded-xl bg-sky-50 text-sky-600 hover:bg-sky-100 text-xs font-medium transition-colors" title="ดึงข้อมูลล่าสุดจากคลาวด์">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                <button onclick="pushToCloud(true)" class="py-2.5 px-3 rounded-xl bg-mint-50 text-mint-700 hover:bg-mint-100 text-xs font-medium transition-colors" title="ส่งข้อมูลในเครื่องขึ้นคลาวด์">
+                    อัปขึ้นคลาวด์
                 </button>
             </div>
         </div>
@@ -426,7 +424,7 @@
         const STORAGE_KEY = 'coop_internship_tasks_v1';
         const CLOUD_URL_KEY = 'coop_cloud_api_url_v1';
 
-        // *** คุณชาสามารถวางลิงก์ Web App URL ตรงนี้ได้โดยตรง เพื่อไม่ต้องกรอกใหม่ในเครื่องอื่น ***
+        // *** วางลิงก์ Web App URL ของคุณชาในเครื่องหมายคำพูดด้านล่างนี้ได้เลยค่ะ ***
         const HARDCODED_CLOUD_URL = 'https://script.google.com/macros/s/AKfycbxek0jOai5um-SszxLiIIVTXZcUB31kg-kNsAl_YqCPGNVsWwDxBKhqJRslrlkDoFEg/exec'; 
 
         const MONTHS_LIST = [
@@ -472,7 +470,7 @@
         let tasks = [];
 
         // ==========================================
-        // CLOUD SYNC ENGINE (GOOGLE SHEETS API)
+        // CLOUD SYNC ENGINE (CORS-FREE GOOGLE SHEETS)
         // ==========================================
         function getCloudUrl() {
             return HARDCODED_CLOUD_URL || localStorage.getItem(CLOUD_URL_KEY) || '';
@@ -528,7 +526,9 @@
 
             updateCloudStatusUI('syncing', 'กำลังซิงก์...');
             try {
-                const res = await fetch(url);
+                // ป้องกันการติด Cache ด้วย timestamp
+                const fetchUrl = `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`;
+                const res = await fetch(fetchUrl);
                 const cloudTasks = await res.json();
                 if (Array.isArray(cloudTasks)) {
                     if (cloudTasks.length > 0) {
@@ -544,24 +544,32 @@
             } catch (err) {
                 console.error(err);
                 updateCloudStatusUI('off', 'ซิงก์ล้มเหลว');
-                showToast('ไม่สามารถเชื่อมต่อ Google Sheets ได้ กรุณาตรวจสอบสิทธิ์ Web App', 'error');
+                showToast('เชื่อมต่อไม่ได้ กรุณาเช็กสิทธิ์ Anyone ใน Apps Script', 'error');
             }
         }
 
-        async function pushToCloud() {
+        async function pushToCloud(showNotification = false) {
             const url = getCloudUrl();
             if (!url) return;
 
             updateCloudStatusUI('syncing', 'กำลังบันทึกขึ้นคลาวด์...');
             try {
+                // ใช้ mode: 'no-cors' และ text/plain เพื่อข้าม CORS Preflight ของเบราว์เซอร์
                 await fetch(url, {
                     method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ tasks })
                 });
                 updateCloudStatusUI('connected', 'ซิงก์คลาวด์แล้ว');
+                if (showNotification) {
+                    closeSyncModal();
+                    showToast('อัปโหลดข้อมูลขึ้น Google Sheets เรียบร้อยค่ะ', 'success');
+                }
             } catch (err) {
                 console.error(err);
                 updateCloudStatusUI('off', 'บันทึกคลาวด์พลาด');
+                showToast('เกิดข้อผิดพลาดในการส่งข้อมูลขึ้นคลาวด์', 'error');
             }
         }
 
