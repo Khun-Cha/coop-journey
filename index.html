@@ -63,33 +63,36 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <!-- Cloud Sync Status & Settings Button -->
+                    <button onclick="openSyncModal()" id="btn-cloud-sync" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/70 text-slate-600 text-xs font-medium flex items-center gap-1.5 border border-slate-200/70 transition-all">
+                        <i id="cloud-icon" data-lucide="cloud-off" class="w-3.5 h-3.5 text-slate-400"></i>
+                        <span id="cloud-status-text">ยังไม่เชื่อมคลาวด์</span>
+                    </button>
+
+                    <!-- Date Mode Switcher -->
                     <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/70">
                         <button id="btn-mode-sys" onclick="setDateMode('system')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 bg-white text-brand-600 shadow-sm">
                             <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                            <span>วันที่จริงของระบบ</span>
+                            <span>วันที่จริง</span>
                         </button>
                         <button id="btn-mode-sim" onclick="setDateMode('sim')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900">
                             <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
-                            <span>จำลองวันที่</span>
+                            <span>จำลอง</span>
                         </button>
                     </div>
 
                     <div id="sim-date-wrapper" class="hidden flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-2.5 py-1 shadow-xs">
-                        <span class="text-xs text-slate-400">วันที่อ้างอิง:</span>
                         <input type="date" id="sim-date-input" min="2026-10-01" max="2027-02-28" value="2026-11-24" onchange="handleSimDateChange(this.value)" class="text-xs font-medium text-slate-700 focus:outline-none bg-transparent cursor-pointer">
                     </div>
 
                     <div class="flex items-center gap-1.5">
-                        <button onclick="exportData()" title="สำรองข้อมูล (Export JSON)" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-brand-600 hover:border-brand-200 hover:bg-brand-50/50 transition-all shadow-xs">
+                        <button onclick="exportData()" title="สำรองข้อมูล (Export JSON)" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-brand-600 hover:border-brand-200 transition-all shadow-xs">
                             <i data-lucide="download" class="w-4 h-4"></i>
                         </button>
-                        <label title="นำเข้าข้อมูล (Import JSON)" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-brand-600 hover:border-brand-200 hover:bg-brand-50/50 transition-all shadow-xs cursor-pointer">
+                        <label title="นำเข้าข้อมูล (Import JSON)" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-brand-600 hover:border-brand-200 transition-all shadow-xs cursor-pointer">
                             <i data-lucide="upload" class="w-4 h-4"></i>
                             <input type="file" id="import-file" accept=".json" onchange="importData(event)" class="hidden">
                         </label>
-                        <button onclick="resetToDefaultTasks()" title="รีเซ็ตกลับเป็นค่าเริ่มต้น" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-coral-600 hover:border-coral-200 hover:bg-coral-50/50 transition-all shadow-xs">
-                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -231,26 +234,11 @@
                     <div id="month-tabs-container" class="flex items-center gap-1.5 overflow-x-auto pb-1"></div>
 
                     <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-1 text-[11px] text-slate-500">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-md bg-mint-100 border border-mint-500/40 inline-block"></span>
-                            <span>ฝึกผ่านแล้ว</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-md bg-white border-2 border-brand-600 inline-block"></span>
-                            <span>วันนี้ (อ้างอิง)</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-md bg-sky-50/80 border border-sky-200 inline-block"></span>
-                            <span>วันฝึกที่เหลือ</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-md bg-coral-50 border border-coral-200 inline-block"></span>
-                            <span>วันหยุดราชการ / เสาร์-อาทิตย์</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-md bg-slate-100 border border-slate-200 inline-block"></span>
-                            <span>นอกช่วงฝึกสหกิจ</span>
-                        </div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-mint-100 border border-mint-500/40 inline-block"></span><span>ฝึกผ่านแล้ว</span></div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-white border-2 border-brand-600 inline-block"></span><span>วันนี้ (อ้างอิง)</span></div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-sky-50/80 border border-sky-200 inline-block"></span><span>วันฝึกที่เหลือ</span></div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-coral-50 border border-coral-200 inline-block"></span><span>วันหยุดราชการ / เสาร์-อาทิตย์</span></div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-slate-100 border border-slate-200 inline-block"></span><span>นอกช่วงฝึกสหกิจ</span></div>
                     </div>
                 </div>
 
@@ -326,21 +314,51 @@
         </div>
     </main>
 
+    <!-- Cloud Sync Configuration Modal -->
+    <div id="sync-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center">
+                        <i data-lucide="cloud" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-display font-semibold text-slate-800">เชื่อมต่อคลาวด์ (Google Sheets)</h3>
+                        <p class="text-xs text-slate-400">ซิงก์ตารางงานอัตโนมัติทุกอุปกรณ์</p>
+                    </div>
+                </div>
+                <button onclick="closeSyncModal()" class="p-1.5 rounded-xl text-slate-400 hover:bg-slate-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-medium text-slate-600">Google Apps Script Web App URL</label>
+                <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:outline-none focus:border-brand-500">
+                <p class="text-[11px] text-slate-400">วางลิงก์ที่ได้จากการ Deploy บน Google Sheets จากนั้นกดบันทึก ระบบจะซิงก์ข้อมูลให้ทันทีค่ะ</p>
+            </div>
+
+            <div class="flex items-center gap-2 pt-2">
+                <button onclick="saveCloudUrl()" class="flex-1 py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium shadow-sm transition-colors">
+                    บันทึกและซิงก์ข้อมูล
+                </button>
+                <button onclick="syncFromCloud(true)" id="btn-manual-sync" class="py-2.5 px-3 rounded-xl bg-sky-50 text-sky-600 hover:bg-sky-100 text-xs font-medium transition-colors" title="ดึงข้อมูลล่าสุดจากคลาวด์">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day Detail & Task Manager Drawer -->
     <div id="day-modal-backdrop" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 hidden transition-opacity opacity-0" onclick="closeDayModal()"></div>
     <aside id="day-modal-panel" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col">
         <div class="p-5 border-b border-slate-100 flex items-start justify-between bg-slate-50/70">
             <div>
                 <div class="flex items-center gap-2 flex-wrap mb-1">
-                    <span id="modal-day-status-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-brand-50 text-brand-600">
-                        วันที่ 31 ของการฝึกสหกิจ
-                    </span>
-                    <span id="modal-holiday-badge" class="hidden px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-coral-50 text-coral-600">
-                        วันหยุดราชการ
-                    </span>
+                    <span id="modal-day-status-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-brand-50 text-brand-600">วันที่ 31 ของการฝึกสหกิจ</span>
+                    <span id="modal-holiday-badge" class="hidden px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-coral-50 text-coral-600">วันหยุดราชการ</span>
                 </div>
-                <h3 id="modal-date-title" class="text-xl font-display font-semibold text-slate-800">
-                    วันอังคารที่ 24 พฤศจิกายน 2569
-                </h3>
+                <h3 id="modal-date-title" class="text-xl font-display font-semibold text-slate-800">วันอังคารที่ 24 พฤศจิกายน 2569</h3>
                 <p id="modal-holiday-name" class="text-xs text-coral-600 font-medium mt-0.5 hidden"></p>
             </div>
             <button onclick="closeDayModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 transition-colors">
@@ -358,7 +376,7 @@
                     <input type="hidden" id="edit-task-id" value="">
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">หัวข้องาน / กิจกรรม <span class="text-coral-500">*</span></label>
-                        <input type="text" id="task-title-input" required placeholder="เช่น นำเสนองานความคืบหน้า, ส่งเล่มรายงาน..." class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15 transition-all">
+                        <input type="text" id="task-title-input" required placeholder="เช่น นำเสนองานความคืบหน้า, ส่งเล่มรายงาน..." class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:border-brand-500">
                     </div>
                     <div class="grid grid-cols-2 gap-2.5">
                         <div>
@@ -406,6 +424,10 @@
         const COOP_END   = '2027-02-12';
         const DEFAULT_SIM_DATE = '2026-11-24';
         const STORAGE_KEY = 'coop_internship_tasks_v1';
+        const CLOUD_URL_KEY = 'coop_cloud_api_url_v1';
+
+        // *** คุณชาสามารถวางลิงก์ Web App URL ตรงนี้ได้โดยตรง เพื่อไม่ต้องกรอกใหม่ในเครื่องอื่น ***
+        const HARDCODED_CLOUD_URL = ''; 
 
         const MONTHS_LIST = [
             { year: 2026, month: 9,  label: 'ต.ค. 2569', fullName: 'ตุลาคม 2569' },
@@ -449,104 +471,150 @@
         let taskFilter = 'upcoming';
         let tasks = [];
 
-        function parseDateStr(str) {
-            const [y, m, d] = str.split('-').map(Number);
-            return new Date(y, m - 1, d);
+        // ==========================================
+        // CLOUD SYNC ENGINE (GOOGLE SHEETS API)
+        // ==========================================
+        function getCloudUrl() {
+            return HARDCODED_CLOUD_URL || localStorage.getItem(CLOUD_URL_KEY) || '';
         }
 
-        function formatDateStr(dateObj) {
-            const y = dateObj.getFullYear();
-            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const d = String(dateObj.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
+        function updateCloudStatusUI(state, text) {
+            const btn = document.getElementById('btn-cloud-sync');
+            const icon = document.getElementById('cloud-icon');
+            const label = document.getElementById('cloud-status-text');
+            label.textContent = text;
+
+            if (state === 'connected') {
+                btn.className = 'px-3 py-1.5 rounded-xl bg-mint-50 hover:bg-mint-100 text-mint-700 text-xs font-medium flex items-center gap-1.5 border border-mint-200 transition-all';
+                icon.setAttribute('data-lucide', 'cloud-check');
+                icon.className = 'w-3.5 h-3.5 text-mint-600';
+            } else if (state === 'syncing') {
+                btn.className = 'px-3 py-1.5 rounded-xl bg-sky-50 text-sky-700 text-xs font-medium flex items-center gap-1.5 border border-sky-200 transition-all';
+                icon.setAttribute('data-lucide', 'refresh-cw');
+                icon.className = 'w-3.5 h-3.5 text-sky-600 animate-spin';
+            } else {
+                btn.className = 'px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/70 text-slate-600 text-xs font-medium flex items-center gap-1.5 border border-slate-200/70 transition-all';
+                icon.setAttribute('data-lucide', 'cloud-off');
+                icon.className = 'w-3.5 h-3.5 text-slate-400';
+            }
+            if (window.lucide) lucide.createIcons();
         }
 
+        function openSyncModal() {
+            document.getElementById('cloud-url-input').value = getCloudUrl();
+            document.getElementById('sync-modal').classList.remove('hidden');
+        }
+
+        function closeSyncModal() {
+            document.getElementById('sync-modal').classList.add('hidden');
+        }
+
+        async function saveCloudUrl() {
+            const url = document.getElementById('cloud-url-input').value.trim();
+            if (!url) {
+                localStorage.removeItem(CLOUD_URL_KEY);
+                updateCloudStatusUI('off', 'ยังไม่เชื่อมคลาวด์');
+                closeSyncModal();
+                return;
+            }
+            localStorage.setItem(CLOUD_URL_KEY, url);
+            closeSyncModal();
+            await syncFromCloud(true);
+        }
+
+        async function syncFromCloud(pushIfEmpty = false) {
+            const url = getCloudUrl();
+            if (!url) return;
+
+            updateCloudStatusUI('syncing', 'กำลังซิงก์...');
+            try {
+                const res = await fetch(url);
+                const cloudTasks = await res.json();
+                if (Array.isArray(cloudTasks)) {
+                    if (cloudTasks.length > 0) {
+                        tasks = cloudTasks;
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+                        renderAll();
+                        showToast('ซิงก์ข้อมูลจาก Google Sheets สำเร็จค่ะ', 'success');
+                    } else if (pushIfEmpty && tasks.length > 0) {
+                        await pushToCloud();
+                    }
+                    updateCloudStatusUI('connected', 'ซิงก์คลาวด์แล้ว');
+                }
+            } catch (err) {
+                console.error(err);
+                updateCloudStatusUI('off', 'ซิงก์ล้มเหลว');
+                showToast('ไม่สามารถเชื่อมต่อ Google Sheets ได้ กรุณาตรวจสอบสิทธิ์ Web App', 'error');
+            }
+        }
+
+        async function pushToCloud() {
+            const url = getCloudUrl();
+            if (!url) return;
+
+            updateCloudStatusUI('syncing', 'กำลังบันทึกขึ้นคลาวด์...');
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify({ tasks })
+                });
+                updateCloudStatusUI('connected', 'ซิงก์คลาวด์แล้ว');
+            } catch (err) {
+                console.error(err);
+                updateCloudStatusUI('off', 'บันทึกคลาวด์พลาด');
+            }
+        }
+
+        // ==========================================
+        // DATE & STORAGE UTILITIES
+        // ==========================================
+        function parseDateStr(str) { const [y, m, d] = str.split('-').map(Number); return new Date(y, m - 1, d); }
+        function formatDateStr(dateObj) { return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`; }
         function getSystemTodayStr() { return formatDateStr(new Date()); }
-
-        function formatThaiDateShort(dateStr) {
-            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            const d = parseDateStr(dateStr);
-            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
-        }
-
-        function formatThaiDateFull(dateStr) {
-            const days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
-            const months = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
-            const d = parseDateStr(dateStr);
-            return `วัน${days[d.getDay()]}ที่ ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
-        }
-
+        function formatThaiDateShort(dateStr) { const m = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']; const d = parseDateStr(dateStr); return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear() + 543}`; }
+        function formatThaiDateFull(dateStr) { const days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์']; const m = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']; const d = parseDateStr(dateStr); return `วัน${days[d.getDay()]}ที่ ${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear() + 543}`; }
         function isWithinCoopRange(dateStr) { return dateStr >= COOP_START && dateStr <= COOP_END; }
         function isWeekend(dateObj) { const day = dateObj.getDay(); return day === 0 || day === 6; }
         function isPublicHoliday(dateStr) { return Boolean(THAI_HOLIDAYS[dateStr]); }
 
         function calculateStats(refDateStr) {
-            const start = parseDateStr(COOP_START);
-            const end = parseDateStr(COOP_END);
+            const start = parseDateStr(COOP_START), end = parseDateStr(COOP_END);
             let totalDays = 0, totalWorkdays = 0, passedDays = 0, passedWorkdays = 0, remainingDays = 0, remainingWorkdays = 0, publicHolidayCount = 0, weekendCount = 0;
-
             let cursor = new Date(start);
             while (cursor <= end) {
                 const curStr = formatDateStr(cursor);
                 totalDays++;
-                const wknd = isWeekend(cursor);
-                const pubHol = isPublicHoliday(curStr);
-                const work = !wknd && !pubHol;
-
+                const wknd = isWeekend(cursor), pubHol = isPublicHoliday(curStr), work = !wknd && !pubHol;
                 if (wknd) weekendCount++;
                 if (pubHol && !wknd) publicHolidayCount++;
                 if (work) totalWorkdays++;
-
-                if (curStr <= refDateStr) {
-                    passedDays++;
-                    if (work) passedWorkdays++;
-                } else {
-                    remainingDays++;
-                    if (work) remainingWorkdays++;
-                }
+                if (curStr <= refDateStr) { passedDays++; if (work) passedWorkdays++; }
+                else { remainingDays++; if (work) remainingWorkdays++; }
                 cursor.setDate(cursor.getDate() + 1);
             }
-
-            let coopDayNumber = null;
-            if (isWithinCoopRange(refDateStr)) {
-                coopDayNumber = Math.floor((parseDateStr(refDateStr) - start) / (1000 * 60 * 60 * 24)) + 1;
-            }
-
-            return {
-                totalDays, totalWorkdays, passedDays, passedWorkdays, remainingDays, remainingWorkdays,
-                holidaysTotal: totalDays - totalWorkdays, weekendCount, publicHolidayCount, coopDayNumber,
-                progressPercent: totalDays > 0 ? Math.min(100, Math.max(0, (passedDays / totalDays) * 100)) : 0
-            };
+            let coopDayNumber = isWithinCoopRange(refDateStr) ? Math.floor((parseDateStr(refDateStr) - start) / 86400000) + 1 : null;
+            return { totalDays, totalWorkdays, passedDays, passedWorkdays, remainingDays, remainingWorkdays, holidaysTotal: totalDays - totalWorkdays, weekendCount, publicHolidayCount, coopDayNumber, progressPercent: totalDays > 0 ? Math.min(100, Math.max(0, (passedDays / totalDays) * 100)) : 0 };
         }
 
         function loadTasks() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
                 tasks = raw ? JSON.parse(raw) : [...DEFAULT_TASKS];
-                if (!raw) saveTasks();
+                if (!raw) localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
             } catch (err) { tasks = [...DEFAULT_TASKS]; }
         }
 
         function saveTasks() {
-            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); }
-            catch (err) { showToast('ไม่สามารถบันทึกข้อมูลลงเบราว์เซอร์ได้', 'error'); }
-        }
-
-        function resetToDefaultTasks() {
-            tasks = [...DEFAULT_TASKS];
-            saveTasks();
-            renderAll();
-            showToast('รีเซ็ตตารางงานกลับเป็นค่าเริ่มต้นเรียบร้อยค่ะ', 'info');
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); } catch (err) {}
+            pushToCloud();
         }
 
         function exportData() {
             const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
+            a.href = URL.createObjectURL(blob);
             a.download = `coop-schedule-${currentRefDateStr}.json`;
             a.click();
-            URL.revokeObjectURL(url);
             showToast('ส่งออกข้อมูลตารางงานสำเร็จ (JSON)', 'success');
         }
 
@@ -562,13 +630,16 @@
                         saveTasks();
                         renderAll();
                         showToast(`นำเข้าข้อมูลสำเร็จ (${tasks.length} รายการ)`, 'success');
-                    } else { showToast('รูปแบบไฟล์ JSON ไม่ถูกต้อง', 'error'); }
+                    }
                 } catch (err) { showToast('เกิดข้อผิดพลาดในการอ่านไฟล์', 'error'); }
                 event.target.value = '';
             };
             reader.readAsText(file);
         }
 
+        // ==========================================
+        // RENDER FUNCTIONS
+        // ==========================================
         function renderAll() {
             renderKPIAndProgress();
             renderMonthTabs();
@@ -598,8 +669,7 @@
 
             const statusEl = document.getElementById('status-message');
             if (currentRefDateStr < COOP_START) {
-                const daysUntilStart = Math.ceil((parseDateStr(COOP_START) - parseDateStr(currentRefDateStr)) / (1000 * 60 * 60 * 24));
-                statusEl.textContent = `อีก ${daysUntilStart} วันจะเริ่มฝึกสหกิจ`;
+                statusEl.textContent = `อีก ${Math.ceil((parseDateStr(COOP_START) - parseDateStr(currentRefDateStr)) / 86400000)} วันจะเริ่มฝึกสหกิจ`;
                 statusEl.className = 'text-amber-600 font-medium';
             } else if (currentRefDateStr > COOP_END) {
                 statusEl.textContent = 'สำเร็จการฝึกสหกิจศึกษาแล้ว 🎉';
@@ -613,7 +683,7 @@
         function renderMonthTabs() {
             document.getElementById('month-tabs-container').innerHTML = MONTHS_LIST.map((m, idx) => {
                 const isActive = !isAllMonthsView && activeMonthIndex === idx;
-                return `<button onclick="selectMonth(${idx})" class="px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${isActive ? 'bg-brand-600 text-white shadow-sm shadow-brand-600/20' : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70'}">${m.label}</button>`;
+                return `<button onclick="selectMonth(${idx})" class="px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${isActive ? 'bg-brand-600 text-white shadow-sm' : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/70'}">${m.label}</button>`;
             }).join('');
         }
 
@@ -625,67 +695,42 @@
 
             const grid = document.getElementById('calendar-days-grid');
             grid.innerHTML = '';
+            const startDayOfWeek = new Date(mInfo.year, mInfo.month, 1).getDay();
+            const totalDaysInMonth = new Date(mInfo.year, mInfo.month + 1, 0).getDate();
 
-            const firstDayOfMonth = new Date(mInfo.year, mInfo.month, 1);
-            const lastDayOfMonth = new Date(mInfo.year, mInfo.month + 1, 0);
-            const startDayOfWeek = firstDayOfMonth.getDay();
-            const totalDaysInMonth = lastDayOfMonth.getDate();
-
-            for (let i = 0; i < startDayOfWeek; i++) {
-                grid.innerHTML += `<div class="min-h-[84px] sm:min-h-[105px] rounded-2xl bg-slate-50/40 border border-transparent"></div>`;
-            }
+            for (let i = 0; i < startDayOfWeek; i++) grid.innerHTML += `<div class="min-h-[84px] sm:min-h-[105px] rounded-2xl bg-slate-50/40"></div>`;
 
             for (let day = 1; day <= totalDaysInMonth; day++) {
                 const dateObj = new Date(mInfo.year, mInfo.month, day);
                 const dateStr = formatDateStr(dateObj);
-                const inRange = isWithinCoopRange(dateStr);
-                const isToday = dateStr === currentRefDateStr;
-                const isPassed = inRange && dateStr < currentRefDateStr;
-                const wknd = isWeekend(dateObj);
-                const holidayName = THAI_HOLIDAYS[dateStr];
+                const inRange = isWithinCoopRange(dateStr), isToday = dateStr === currentRefDateStr, isPassed = inRange && dateStr < currentRefDateStr, wknd = isWeekend(dateObj), holidayName = THAI_HOLIDAYS[dateStr];
                 const dayTasks = tasks.filter(t => t.date === dateStr);
 
                 let cellClasses = 'calendar-day relative min-h-[84px] sm:min-h-[105px] rounded-2xl p-2 flex flex-col justify-between cursor-pointer border text-left select-none ';
                 let dayNumClasses = 'text-xs sm:text-sm font-display font-semibold w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center ';
 
-                if (!inRange) {
-                    cellClasses += 'outside-range outside-range-bg bg-slate-100/70 border-slate-200/50 text-slate-400 opacity-65 hover:opacity-90';
-                    dayNumClasses += holidayName || wknd ? 'text-coral-400' : 'text-slate-400';
-                } else if (isToday) {
-                    cellClasses += 'bg-white border-2 border-brand-600 ring-4 ring-brand-500/10 shadow-md';
-                    dayNumClasses += 'bg-brand-600 text-white';
-                } else if (holidayName || wknd) {
-                    cellClasses += isPassed ? 'bg-coral-50/60 border-coral-200/70 text-slate-700' : 'bg-coral-50/90 border-coral-200 text-slate-800';
-                    dayNumClasses += 'text-coral-600';
-                } else if (isPassed) {
-                    cellClasses += 'bg-mint-50/75 border-mint-200/80 text-slate-700';
-                    dayNumClasses += 'text-mint-700';
-                } else {
-                    cellClasses += 'bg-sky-50/40 border-slate-200/80 hover:border-brand-300 hover:bg-white text-slate-800';
-                    dayNumClasses += 'text-slate-700';
-                }
+                if (!inRange) { cellClasses += 'outside-range outside-range-bg bg-slate-100/70 border-slate-200/50 text-slate-400 opacity-65'; dayNumClasses += holidayName || wknd ? 'text-coral-400' : 'text-slate-400'; }
+                else if (isToday) { cellClasses += 'bg-white border-2 border-brand-600 ring-4 ring-brand-500/10 shadow-md'; dayNumClasses += 'bg-brand-600 text-white'; }
+                else if (holidayName || wknd) { cellClasses += isPassed ? 'bg-coral-50/60 border-coral-200/70' : 'bg-coral-50/90 border-coral-200'; dayNumClasses += 'text-coral-600'; }
+                else if (isPassed) { cellClasses += 'bg-mint-50/75 border-mint-200/80'; dayNumClasses += 'text-mint-700'; }
+                else { cellClasses += 'bg-sky-50/40 border-slate-200/80 hover:border-brand-300 hover:bg-white'; dayNumClasses += 'text-slate-700'; }
 
-                let milestoneBadge = '';
-                if (dateStr === COOP_START) milestoneBadge = `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-brand-600 text-white leading-none">เริ่มฝึก</span>`;
-                else if (dateStr === COOP_END) milestoneBadge = `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-emerald-600 text-white leading-none">วันสุดท้าย</span>`;
-                else if (isToday) milestoneBadge = `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-brand-100 text-brand-700 leading-none">วันนี้</span>`;
-                else if (isPassed && !holidayName && !wknd) milestoneBadge = `<i data-lucide="check" class="w-3.5 h-3.5 text-mint-600"></i>`;
+                let milestoneBadge = dateStr === COOP_START ? `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-brand-600 text-white leading-none">เริ่มฝึก</span>`
+                    : dateStr === COOP_END ? `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-emerald-600 text-white leading-none">วันสุดท้าย</span>`
+                    : isToday ? `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-brand-100 text-brand-700 leading-none">วันนี้</span>`
+                    : (isPassed && !holidayName && !wknd) ? `<i data-lucide="check" class="w-3.5 h-3.5 text-mint-600"></i>` : '';
 
                 let holidayHTML = holidayName ? `<div class="text-[10px] leading-tight font-medium text-coral-600 line-clamp-1 mt-0.5" title="${holidayName}">${holidayName}</div>` : '';
-
                 let tasksHTML = '';
                 if (dayTasks.length > 0) {
-                    const visibleTasks = dayTasks.slice(0, 2);
-                    const extraCount = dayTasks.length - visibleTasks.length;
                     tasksHTML = `<div class="mt-1 space-y-1">`;
-                    visibleTasks.forEach(t => {
+                    dayTasks.slice(0, 2).forEach(t => {
                         const cat = CATEGORIES[t.category] || CATEGORIES.general;
-                        tasksHTML += `<div class="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-medium border ${cat.badgeBg} ${t.completed ? 'line-through opacity-60' : ''} truncate" title="${t.title}"><span class="w-1.5 h-1.5 rounded-full ${cat.dotColor} shrink-0"></span><span class="truncate">${t.title}</span></div>`;
+                        tasksHTML += `<div class="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-medium border ${cat.badgeBg} ${t.completed ? 'line-through opacity-60' : ''} truncate"><span class="w-1.5 h-1.5 rounded-full ${cat.dotColor} shrink-0"></span><span class="truncate">${t.title}</span></div>`;
                     });
-                    if (extraCount > 0) tasksHTML += `<div class="text-[9px] font-medium text-brand-600 pl-1">+อีก ${extraCount} รายการ</div>`;
+                    if (dayTasks.length > 2) tasksHTML += `<div class="text-[9px] font-medium text-brand-600 pl-1">+อีก ${dayTasks.length - 2} รายการ</div>`;
                     tasksHTML += `</div>`;
                 }
-
                 grid.innerHTML += `<div onclick="openDayModal('${dateStr}')" class="${cellClasses}"><div><div class="flex items-center justify-between gap-1"><span class="${dayNumClasses}">${day}</span>${milestoneBadge}</div>${holidayHTML}</div>${tasksHTML}</div>`;
             }
         }
@@ -694,91 +739,52 @@
             document.getElementById('calendar-heading').textContent = 'ภาพรวมปฏิทินตลอดการฝึกสหกิจ (5 เดือน)';
             const container = document.getElementById('all-months-view');
             container.innerHTML = '';
-
             MONTHS_LIST.forEach((mInfo, idx) => {
-                const firstDay = new Date(mInfo.year, mInfo.month, 1).getDay();
-                const totalDays = new Date(mInfo.year, mInfo.month + 1, 0).getDate();
+                const firstDay = new Date(mInfo.year, mInfo.month, 1).getDay(), totalDays = new Date(mInfo.year, mInfo.month + 1, 0).getDate();
                 let miniCells = '';
                 for (let i = 0; i < firstDay; i++) miniCells += `<div class="h-8"></div>`;
-
                 for (let d = 1; d <= totalDays; d++) {
-                    const dateObj = new Date(mInfo.year, mInfo.month, d);
-                    const dateStr = formatDateStr(dateObj);
-                    const inRange = isWithinCoopRange(dateStr);
-                    const isToday = dateStr === currentRefDateStr;
-                    const isPassed = inRange && dateStr < currentRefDateStr;
-                    const wknd = isWeekend(dateObj);
-                    const isHol = isPublicHoliday(dateStr);
-                    const hasTasks = tasks.some(t => t.date === dateStr);
-
+                    const dateObj = new Date(mInfo.year, mInfo.month, d), dateStr = formatDateStr(dateObj), inRange = isWithinCoopRange(dateStr), isToday = dateStr === currentRefDateStr, isPassed = inRange && dateStr < currentRefDateStr, wknd = isWeekend(dateObj), isHol = isPublicHoliday(dateStr), hasTasks = tasks.some(t => t.date === dateStr);
                     let cls = 'h-8 rounded-lg flex flex-col items-center justify-center text-xs font-medium cursor-pointer relative transition-transform hover:scale-105 ';
                     if (!inRange) cls += 'text-slate-300 bg-slate-100/50';
                     else if (isToday) cls += 'bg-brand-600 text-white font-bold shadow-xs';
                     else if (isHol || wknd) cls += 'bg-coral-50 text-coral-600';
                     else if (isPassed) cls += 'bg-mint-100/80 text-mint-700';
                     else cls += 'bg-sky-50/80 text-slate-700 hover:bg-brand-50';
-
-                    const taskDot = hasTasks ? `<span class="w-1 h-1 rounded-full ${isToday ? 'bg-white' : 'bg-brand-500'} absolute bottom-1"></span>` : '';
-                    miniCells += `<div onclick="openDayModal('${dateStr}')" class="${cls}" title="${formatThaiDateShort(dateStr)}"><span>${d}</span>${taskDot}</div>`;
+                    miniCells += `<div onclick="openDayModal('${dateStr}')" class="${cls}"><span>${d}</span>${hasTasks ? `<span class="w-1 h-1 rounded-full ${isToday ? 'bg-white' : 'bg-brand-500'} absolute bottom-1"></span>` : ''}</div>`;
                 }
-
                 container.innerHTML += `<div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs"><div class="flex items-center justify-between mb-3"><h3 class="font-display font-semibold text-slate-800 text-sm">${mInfo.fullName}</h3><button onclick="selectMonth(${idx})" class="text-xs text-brand-600 hover:underline font-medium">ขยายดูเดือนนี้</button></div><div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-slate-400 mb-1"><div class="text-coral-400">อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div class="text-coral-400">ส</div></div><div class="grid grid-cols-7 gap-1">${miniCells}</div></div>`;
             });
         }
 
         function renderUpcomingTasks() {
-            const listEl = document.getElementById('upcoming-tasks-list');
-            const badgeEl = document.getElementById('upcoming-count-badge');
+            const listEl = document.getElementById('upcoming-tasks-list'), badgeEl = document.getElementById('upcoming-count-badge');
             const sorted = [...tasks].sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : (a.time || '23:59').localeCompare(b.time || '23:59'));
-
-            let filtered = sorted;
-            if (taskFilter === 'upcoming') filtered = sorted.filter(t => t.date >= currentRefDateStr && !t.completed);
-            else if (taskFilter === 'completed') filtered = sorted.filter(t => t.completed);
-
+            let filtered = taskFilter === 'upcoming' ? sorted.filter(t => t.date >= currentRefDateStr && !t.completed) : taskFilter === 'completed' ? sorted.filter(t => t.completed) : sorted;
             badgeEl.textContent = filtered.length;
 
             if (filtered.length === 0) {
-                listEl.innerHTML = `<div class="text-center py-8 px-4 rounded-2xl bg-slate-50 border border-dashed border-slate-200"><i data-lucide="clipboard-check" class="w-8 h-8 text-slate-300 mx-auto mb-2"></i><p class="text-xs text-slate-500 font-medium">ไม่มีรายการในหมวดหมู่นี้</p><p class="text-[11px] text-slate-400 mt-0.5">คลิกที่วันที่บนปฏิทินเพื่อเพิ่มกำหนดการใหม่</p></div>`;
+                listEl.innerHTML = `<div class="text-center py-8 px-4 rounded-2xl bg-slate-50 border border-dashed border-slate-200"><p class="text-xs text-slate-500 font-medium">ไม่มีรายการในหมวดหมู่นี้</p></div>`;
                 return;
             }
-
             listEl.innerHTML = filtered.map(t => {
                 const cat = CATEGORIES[t.category] || CATEGORIES.general;
-                const diffDays = Math.round((parseDateStr(t.date) - parseDateStr(currentRefDateStr)) / (1000 * 60 * 60 * 24));
-                let dayDiffLabel = t.completed ? `<span class="text-[10px] text-mint-600 font-medium">เสร็จสิ้นแล้ว</span>`
-                    : diffDays === 0 ? `<span class="text-[10px] px-1.5 py-0.5 rounded-md bg-brand-600 text-white font-medium">วันนี้</span>`
-                    : diffDays > 0 ? `<span class="text-[10px] text-sky-600 font-medium">อีก ${diffDays} วัน</span>`
-                    : `<span class="text-[10px] text-coral-500 font-medium">เลยกำหนด ${Math.abs(diffDays)} วัน</span>`;
-
-                return `<div onclick="openDayModal('${t.date}')" class="group p-3 rounded-2xl border border-slate-200/80 hover:border-brand-300 bg-white hover:bg-brand-50/20 transition-all cursor-pointer"><div class="flex items-start gap-2.5"><button onclick="event.stopPropagation(); toggleTaskComplete('${t.id}')" class="mt-0.5 w-4 h-4 rounded-md border flex items-center justify-center transition-colors shrink-0 ${t.completed ? 'bg-mint-500 border-mint-500 text-white' : 'border-slate-300 hover:border-brand-500 bg-white'}">${t.completed ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}</button><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-2 mb-1"><span class="text-[11px] font-medium text-slate-500 flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3 text-slate-400"></i>${formatThaiDateShort(t.date)} ${t.time ? `• ${t.time} น.` : ''}</span>${dayDiffLabel}</div><p class="text-xs sm:text-sm font-medium text-slate-800 leading-snug ${t.completed ? 'line-through text-slate-400' : ''}">${t.title}</p><div class="mt-1.5 flex items-center gap-1.5"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium border ${cat.badgeBg}">${cat.icon} ${cat.label}</span></div></div></div></div>`;
+                const diffDays = Math.round((parseDateStr(t.date) - parseDateStr(currentRefDateStr)) / 86400000);
+                let dayDiffLabel = t.completed ? `<span class="text-[10px] text-mint-600 font-medium">เสร็จสิ้นแล้ว</span>` : diffDays === 0 ? `<span class="text-[10px] px-1.5 py-0.5 rounded-md bg-brand-600 text-white font-medium">วันนี้</span>` : diffDays > 0 ? `<span class="text-[10px] text-sky-600 font-medium">อีก ${diffDays} วัน</span>` : `<span class="text-[10px] text-coral-500 font-medium">เลยกำหนด ${Math.abs(diffDays)} วัน</span>`;
+                return `<div onclick="openDayModal('${t.date}')" class="group p-3 rounded-2xl border border-slate-200/80 hover:border-brand-300 bg-white transition-all cursor-pointer"><div class="flex items-start gap-2.5"><button onclick="event.stopPropagation(); toggleTaskComplete('${t.id}')" class="mt-0.5 w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${t.completed ? 'bg-mint-500 border-mint-500 text-white' : 'border-slate-300 bg-white'}">${t.completed ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}</button><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-2 mb-1"><span class="text-[11px] font-medium text-slate-500">${formatThaiDateShort(t.date)} ${t.time ? `• ${t.time} น.` : ''}</span>${dayDiffLabel}</div><p class="text-xs sm:text-sm font-medium text-slate-800 ${t.completed ? 'line-through text-slate-400' : ''}">${t.title}</p><div class="mt-1.5"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium border ${cat.badgeBg}">${cat.icon} ${cat.label}</span></div></div></div></div>`;
             }).join('');
         }
 
         function renderHolidaysSummary() {
-            const coopHolidays = Object.entries(THAI_HOLIDAYS).filter(([d]) => isWithinCoopRange(d));
-            document.getElementById('holidays-summary-list').innerHTML = coopHolidays.map(([dateStr, name]) => {
-                const isPassed = dateStr < currentRefDateStr;
-                return `<div onclick="openDayModal('${dateStr}')" class="flex items-center justify-between p-2 rounded-xl hover:bg-coral-50/50 cursor-pointer transition-colors ${isPassed ? 'opacity-60' : ''}"><div class="flex items-center gap-2 min-w-0"><span class="w-2 h-2 rounded-full bg-coral-500 shrink-0"></span><span class="text-slate-700 font-medium truncate" title="${name}">${name}</span></div><span class="text-coral-600 font-medium shrink-0 ml-2">${formatThaiDateShort(dateStr)}</span></div>`;
-            }).join('');
+            document.getElementById('holidays-summary-list').innerHTML = Object.entries(THAI_HOLIDAYS).filter(([d]) => isWithinCoopRange(d)).map(([dateStr, name]) => `<div onclick="openDayModal('${dateStr}')" class="flex items-center justify-between p-2 rounded-xl hover:bg-coral-50/50 cursor-pointer ${dateStr < currentRefDateStr ? 'opacity-60' : ''}"><div class="flex items-center gap-2 min-w-0"><span class="w-2 h-2 rounded-full bg-coral-500 shrink-0"></span><span class="text-slate-700 font-medium truncate">${name}</span></div><span class="text-coral-600 font-medium shrink-0 ml-2">${formatThaiDateShort(dateStr)}</span></div>`).join('');
         }
 
         function setDateMode(mode) {
             dateMode = mode;
-            const btnSim = document.getElementById('btn-mode-sim');
-            const btnSys = document.getElementById('btn-mode-sys');
-            const simWrapper = document.getElementById('sim-date-wrapper');
-
-            if (mode === 'sim') {
-                btnSim.className = 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 bg-white text-brand-600 shadow-sm';
-                btnSys.className = 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900';
-                simWrapper.classList.remove('hidden');
-                currentRefDateStr = document.getElementById('sim-date-input').value || DEFAULT_SIM_DATE;
-            } else {
-                btnSys.className = 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 bg-white text-brand-600 shadow-sm';
-                btnSim.className = 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900';
-                simWrapper.classList.add('hidden');
-                currentRefDateStr = getSystemTodayStr();
-            }
+            document.getElementById('btn-mode-sim').className = mode === 'sim' ? 'px-3 py-1.5 rounded-lg text-xs font-medium bg-white text-brand-600 shadow-sm flex items-center gap-1.5' : 'px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 flex items-center gap-1.5';
+            document.getElementById('btn-mode-sys').className = mode === 'system' ? 'px-3 py-1.5 rounded-lg text-xs font-medium bg-white text-brand-600 shadow-sm flex items-center gap-1.5' : 'px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 flex items-center gap-1.5';
+            document.getElementById('sim-date-wrapper').classList.toggle('hidden', mode !== 'sim');
+            currentRefDateStr = mode === 'sim' ? (document.getElementById('sim-date-input').value || DEFAULT_SIM_DATE) : getSystemTodayStr();
             jumpToRefMonth();
             renderAll();
         }
@@ -786,157 +792,90 @@
         function handleSimDateChange(val) { if (val) { currentRefDateStr = val; jumpToRefMonth(); renderAll(); } }
         function selectMonth(idx) { isAllMonthsView = false; activeMonthIndex = idx; updateViewToggleUI(); renderAll(); }
         function changeMonth(delta) { const next = activeMonthIndex + delta; if (next >= 0 && next < MONTHS_LIST.length) selectMonth(next); }
-
         function jumpToRefMonth() {
             const ref = parseDateStr(currentRefDateStr);
             const foundIdx = MONTHS_LIST.findIndex(m => m.year === ref.getFullYear() && m.month === ref.getMonth());
-            if (foundIdx !== -1) activeMonthIndex = foundIdx;
-            else if (currentRefDateStr < COOP_START) activeMonthIndex = 0;
-            else if (currentRefDateStr > COOP_END) activeMonthIndex = MONTHS_LIST.length - 1;
+            activeMonthIndex = foundIdx !== -1 ? foundIdx : (currentRefDateStr < COOP_START ? 0 : MONTHS_LIST.length - 1);
             if (isAllMonthsView) { isAllMonthsView = false; updateViewToggleUI(); }
             renderAll();
         }
-
         function toggleAllMonthsView() { isAllMonthsView = !isAllMonthsView; updateViewToggleUI(); renderAll(); }
-
         function updateViewToggleUI() {
-            const singleView = document.getElementById('single-month-view');
-            const allView = document.getElementById('all-months-view');
-            const navBtns = document.getElementById('month-nav-buttons');
-            const btnText = document.getElementById('btn-all-months-text');
-            if (isAllMonthsView) { singleView.classList.add('hidden'); allView.classList.remove('hidden'); navBtns.classList.add('hidden'); btnText.textContent = 'ดูแบบรายเดือน'; }
-            else { singleView.classList.remove('hidden'); allView.classList.add('hidden'); navBtns.classList.remove('hidden'); btnText.textContent = 'ดูภาพรวม 5 เดือน'; }
+            document.getElementById('single-month-view').classList.toggle('hidden', isAllMonthsView);
+            document.getElementById('all-months-view').classList.toggle('hidden', !isAllMonthsView);
+            document.getElementById('month-nav-buttons').classList.toggle('hidden', isAllMonthsView);
+            document.getElementById('btn-all-months-text').textContent = isAllMonthsView ? 'ดูแบบรายเดือน' : 'ดูภาพรวม 5 เดือน';
         }
-
         function setTaskFilter(filter) {
             taskFilter = filter;
-            ['upcoming', 'all', 'completed'].forEach(f => {
-                document.getElementById(`filter-${f}`).className = f === filter
-                    ? 'px-2.5 py-1 rounded-lg text-xs font-medium bg-brand-50 text-brand-600 transition-colors'
-                    : 'px-2.5 py-1 rounded-lg text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors';
-            });
+            ['upcoming', 'all', 'completed'].forEach(f => { document.getElementById(`filter-${f}`).className = f === filter ? 'px-2.5 py-1 rounded-lg text-xs font-medium bg-brand-50 text-brand-600' : 'px-2.5 py-1 rounded-lg text-xs font-medium text-slate-500'; });
             renderUpcomingTasks();
-            if (window.lucide) lucide.createIcons();
         }
 
         function openDayModal(dateStr) {
-            selectedModalDateStr = dateStr;
-            resetTaskForm();
-            renderModalContent(dateStr);
-            const backdrop = document.getElementById('day-modal-backdrop');
-            const panel = document.getElementById('day-modal-panel');
-            backdrop.classList.remove('hidden');
-            void backdrop.offsetWidth;
-            backdrop.classList.remove('opacity-0');
-            panel.classList.remove('translate-x-full');
+            selectedModalDateStr = dateStr; resetTaskForm(); renderModalContent(dateStr);
+            const backdrop = document.getElementById('day-modal-backdrop'), panel = document.getElementById('day-modal-panel');
+            backdrop.classList.remove('hidden'); void backdrop.offsetWidth; backdrop.classList.remove('opacity-0'); panel.classList.remove('translate-x-full');
             if (window.lucide) lucide.createIcons();
         }
-
         function closeDayModal() {
-            const backdrop = document.getElementById('day-modal-backdrop');
-            const panel = document.getElementById('day-modal-panel');
-            backdrop.classList.add('opacity-0');
-            panel.classList.add('translate-x-full');
+            const backdrop = document.getElementById('day-modal-backdrop'), panel = document.getElementById('day-modal-panel');
+            backdrop.classList.add('opacity-0'); panel.classList.add('translate-x-full');
             setTimeout(() => { backdrop.classList.add('hidden'); selectedModalDateStr = null; }, 300);
         }
-
         function renderModalContent(dateStr) {
             document.getElementById('modal-date-title').textContent = formatThaiDateFull(dateStr);
             const statusBadge = document.getElementById('modal-day-status-badge');
-            if (isWithinCoopRange(dateStr)) {
-                const diff = Math.floor((parseDateStr(dateStr) - parseDateStr(COOP_START)) / (1000 * 60 * 60 * 24)) + 1;
-                statusBadge.textContent = `วันที่ ${diff} ของการฝึกสหกิจ`;
-                statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-brand-50 text-brand-600';
-            } else {
-                statusBadge.textContent = 'นอกช่วงฝึกสหกิจ';
-                statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-200 text-slate-600';
-            }
+            if (isWithinCoopRange(dateStr)) { statusBadge.textContent = `วันที่ ${Math.floor((parseDateStr(dateStr) - parseDateStr(COOP_START)) / 86400000) + 1} ของการฝึกสหกิจ`; statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-brand-50 text-brand-600'; }
+            else { statusBadge.textContent = 'นอกช่วงฝึกสหกิจ'; statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-200 text-slate-600'; }
 
-            const holidayBadge = document.getElementById('modal-holiday-badge');
-            const holidayNameEl = document.getElementById('modal-holiday-name');
-            const holidayName = THAI_HOLIDAYS[dateStr];
-            const wknd = isWeekend(parseDateStr(dateStr));
-
+            const holidayBadge = document.getElementById('modal-holiday-badge'), holidayNameEl = document.getElementById('modal-holiday-name'), holidayName = THAI_HOLIDAYS[dateStr], wknd = isWeekend(parseDateStr(dateStr));
             if (holidayName) { holidayBadge.classList.remove('hidden'); holidayBadge.textContent = 'วันหยุดราชการ'; holidayNameEl.classList.remove('hidden'); holidayNameEl.textContent = `🎉 ${holidayName}`; }
             else if (wknd) { holidayBadge.classList.remove('hidden'); holidayBadge.textContent = 'วันหยุดสุดสัปดาห์'; holidayNameEl.classList.add('hidden'); }
             else { holidayBadge.classList.add('hidden'); holidayNameEl.classList.add('hidden'); }
 
             const dayTasks = tasks.filter(t => t.date === dateStr).sort((a, b) => (a.time || '23:59').localeCompare(b.time || '23:59'));
             document.getElementById('modal-task-count').textContent = `${dayTasks.length} รายการ`;
-
             const listContainer = document.getElementById('modal-tasks-list');
-            if (dayTasks.length === 0) {
-                listContainer.innerHTML = `<div class="text-center py-8 px-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/50"><p class="text-xs text-slate-500 font-medium">ยังไม่มีรายการสิ่งที่ต้องทำในวันนี้</p><p class="text-[11px] text-slate-400 mt-1">ใช้แบบฟอร์มด้านบนเพื่อเพิ่มนัดหมายหรือส่งงานได้เลย</p></div>`;
-                return;
-            }
+            if (dayTasks.length === 0) { listContainer.innerHTML = `<div class="text-center py-8 px-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/50"><p class="text-xs text-slate-500 font-medium">ยังไม่มีรายการสิ่งที่ต้องทำในวันนี้</p></div>`; return; }
 
             listContainer.innerHTML = dayTasks.map(t => {
                 const cat = CATEGORIES[t.category] || CATEGORIES.general;
-                return `<div class="p-3.5 rounded-2xl border border-slate-200 bg-white shadow-xs transition-all"><div class="flex items-start justify-between gap-2"><div class="flex items-start gap-2.5 flex-1 min-w-0"><button onclick="toggleTaskComplete('${t.id}')" class="mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center transition-colors shrink-0 ${t.completed ? 'bg-mint-500 border-mint-500 text-white' : 'border-slate-300 hover:border-brand-500'}">${t.completed ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}</button><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 flex-wrap mb-1"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium border ${cat.badgeBg}">${cat.icon} ${cat.label}</span>${t.time ? `<span class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">⏰ ${t.time} น.</span>` : ''}</div><h5 class="text-sm font-semibold text-slate-800 ${t.completed ? 'line-through text-slate-400' : ''}">${t.title}</h5>${t.note ? `<p class="text-xs text-slate-500 mt-1 whitespace-pre-line">${t.note}</p>` : ''}</div></div><div class="flex items-center gap-1 shrink-0"><button onclick="startEditTask('${t.id}')" title="แก้ไข" class="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteTask('${t.id}')" title="ลบรายการ" class="p-1.5 rounded-lg text-slate-400 hover:text-coral-600 hover:bg-coral-50 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div></div>`;
+                return `<div class="p-3.5 rounded-2xl border border-slate-200 bg-white shadow-xs"><div class="flex items-start justify-between gap-2"><div class="flex items-start gap-2.5 flex-1 min-w-0"><button onclick="toggleTaskComplete('${t.id}')" class="mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${t.completed ? 'bg-mint-500 border-mint-500 text-white' : 'border-slate-300'}">${t.completed ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}</button><div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 flex-wrap mb-1"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium border ${cat.badgeBg}">${cat.icon} ${cat.label}</span>${t.time ? `<span class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">⏰ ${t.time} น.</span>` : ''}</div><h5 class="text-sm font-semibold text-slate-800 ${t.completed ? 'line-through text-slate-400' : ''}">${t.title}</h5>${t.note ? `<p class="text-xs text-slate-500 mt-1 whitespace-pre-line">${t.note}</p>` : ''}</div></div><div class="flex items-center gap-1 shrink-0"><button onclick="startEditTask('${t.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-brand-600"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteTask('${t.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-coral-600"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div></div>`;
             }).join('');
         }
 
         function handleTaskSubmit(e) {
             e.preventDefault();
             if (!selectedModalDateStr) return;
-            const editId = document.getElementById('edit-task-id').value;
-            const title = document.getElementById('task-title-input').value.trim();
-            const category = document.getElementById('task-category-input').value;
-            const time = document.getElementById('task-time-input').value;
-            const note = document.getElementById('task-note-input').value.trim();
+            const editId = document.getElementById('edit-task-id').value, title = document.getElementById('task-title-input').value.trim(), category = document.getElementById('task-category-input').value, time = document.getElementById('task-time-input').value, note = document.getElementById('task-note-input').value.trim();
             if (!title) return;
-
-            if (editId) {
-                const idx = tasks.findIndex(t => t.id === editId);
-                if (idx !== -1) { tasks[idx] = { ...tasks[idx], title, category, time, note }; showToast('อัปเดตรายการเรียบร้อยแล้ว', 'success'); }
-            } else {
-                tasks.push({ id: 'task-' + Date.now(), date: selectedModalDateStr, title, category, time, note, completed: false });
-                showToast('เพิ่มรายการใหม่ลงปฏิทินแล้ว', 'success');
-            }
+            if (editId) { const idx = tasks.findIndex(t => t.id === editId); if (idx !== -1) { tasks[idx] = { ...tasks[idx], title, category, time, note }; showToast('อัปเดตรายการเรียบร้อยแล้ว', 'success'); } }
+            else { tasks.push({ id: 'task-' + Date.now(), date: selectedModalDateStr, title, category, time, note, completed: false }); showToast('เพิ่มรายการใหม่ลงปฏิทินแล้ว', 'success'); }
             saveTasks(); resetTaskForm(); renderAll();
         }
 
         function startEditTask(taskId) {
             const task = tasks.find(t => t.id === taskId);
             if (!task) return;
-            document.getElementById('edit-task-id').value = task.id;
-            document.getElementById('task-title-input').value = task.title;
-            document.getElementById('task-category-input').value = task.category;
-            document.getElementById('task-time-input').value = task.time || '';
-            document.getElementById('task-note-input').value = task.note || '';
+            document.getElementById('edit-task-id').value = task.id; document.getElementById('task-title-input').value = task.title; document.getElementById('task-category-input').value = task.category; document.getElementById('task-time-input').value = task.time || ''; document.getElementById('task-note-input').value = task.note || '';
             document.getElementById('form-title').innerHTML = `<i data-lucide="edit-3" class="w-4 h-4 text-amber-500"></i><span>แก้ไขรายการ</span>`;
             document.getElementById('btn-submit-task').innerHTML = `<i data-lucide="save" class="w-4 h-4"></i><span>บันทึกการแก้ไข</span>`;
             document.getElementById('btn-cancel-edit').classList.remove('hidden');
-            document.getElementById('task-title-input').focus();
             if (window.lucide) lucide.createIcons();
         }
-
         function resetTaskForm() {
-            document.getElementById('task-form').reset();
-            document.getElementById('edit-task-id').value = '';
+            document.getElementById('task-form').reset(); document.getElementById('edit-task-id').value = '';
             document.getElementById('form-title').innerHTML = `<i data-lucide="plus-square" class="w-4 h-4 text-brand-600"></i><span>เพิ่มรายการสิ่งที่ต้องทำ</span>`;
             document.getElementById('btn-submit-task').innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>บันทึกรายการ</span>`;
             document.getElementById('btn-cancel-edit').classList.add('hidden');
             if (window.lucide) lucide.createIcons();
         }
-
-        function toggleTaskComplete(taskId) {
-            const task = tasks.find(t => t.id === taskId);
-            if (!task) return;
-            task.completed = !task.completed;
-            saveTasks(); renderAll();
-            showToast(task.completed ? 'ทำเครื่องหมายว่าเสร็จสิ้นแล้ว ✓' : 'ยกเลิกสถานะเสร็จสิ้น', 'info');
-        }
-
-        function deleteTask(taskId) {
-            tasks = tasks.filter(t => t.id !== taskId);
-            saveTasks(); renderAll();
-            showToast('ลบรายการออกจากปฏิทินแล้ว', 'info');
-        }
+        function toggleTaskComplete(taskId) { const t = tasks.find(x => x.id === taskId); if (t) { t.completed = !t.completed; saveTasks(); renderAll(); } }
+        function deleteTask(taskId) { tasks = tasks.filter(x => x.id !== taskId); saveTasks(); renderAll(); showToast('ลบรายการแล้ว', 'info'); }
 
         function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
+            const container = document.getElementById('toast-container'), toast = document.createElement('div');
             const colors = { success: 'bg-slate-800 text-white border-mint-500', error: 'bg-coral-600 text-white border-coral-400', info: 'bg-slate-800 text-white border-brand-500' };
             toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-lg border-l-4 text-xs sm:text-sm font-medium transform transition-all duration-300 translate-y-4 opacity-0 ${colors[type] || colors.info}`;
             toast.innerHTML = `<span>${message}</span>`;
@@ -949,6 +888,9 @@
             loadTasks();
             document.getElementById('sim-date-input').value = DEFAULT_SIM_DATE;
             setDateMode('system');
+            if (getCloudUrl()) {
+                syncFromCloud(true);
+            }
         });
     </script>
 </body>
